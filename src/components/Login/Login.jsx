@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useContext, useReducer } from 'react';
+import React, { useContext, useReducer, useRef } from 'react';
 
 import Card from '../UI/Card/Card';
 import classes from './Login.module.css';
@@ -9,6 +9,8 @@ import Input from '../UI/Input/Input';
 
 function Login() {
   const ctx = useContext(AuthContext);
+  const emailRef = useRef();
+  const passwordRef = useRef();
   // we comment it out just for the sake of useReducer approach
   // const [enteredEmail, setEnteredEmail] = useState("");
   // const [emailIsValid, setEmailIsValid] = useState();
@@ -121,7 +123,23 @@ function Login() {
 
   const submitHandler = (event) => {
     event.preventDefault();
-    ctx.onLogin(state.enteredEmail, state.enteredPassword);
+    // now when the Button is always enabled by default
+    // we need to check if inputs are valid BEFORE calling 'onLogin'
+    if (state.formIsValid) {
+      ctx.onLogin(state.enteredEmail, state.enteredPassword);
+    } else if (!state.emailIsValid) {
+      // and here we want to do something new:
+      // we want to FOCUS on the input which didn't pass validation.
+      // the naive approach will not work because we cannot 'give' REFS to custom components
+      // BUT only to built-in DOM elements (e.g. <input> and so on). So we have to
+      // attach the REF to a DOM element INSIDE CHILD component via combination of:
+      // - passing a 'ref' prop;
+      // - wrapping CHILD component with React.forwardRef (where we get 'ref' as a 2nd argument).
+      // After doing all of this the following WILL work:
+      emailRef.current.focus();
+    } else {
+      passwordRef.current.focus();
+    }
   };
 
   // we comment out useEffect because we are using useReducer for the same state updates
@@ -173,6 +191,7 @@ function Login() {
           id="email"
           label="Email"
           type="email"
+          ref={emailRef}
           value={state.enteredEmail}
           isValid={state.emailIsValid}
           onChange={emailChangeHandler}
@@ -182,6 +201,7 @@ function Login() {
           id="password"
           label="Password"
           type="password"
+          ref={passwordRef}
           value={state.enteredPassword}
           isValid={state.passwordIsValid}
           onChange={passwordChangeHandler}
