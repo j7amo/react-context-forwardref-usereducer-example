@@ -1,9 +1,9 @@
-import React, { useContext } from "react";
+import React, { useContext } from 'react';
 
-import classes from "./Navigation.module.css";
-import AuthContext from "../../store/auth-context";
+import classes from './Navigation.module.css';
+import AuthContext from '../../store/auth-context';
 
-const Navigation = () => {
+function Navigation() {
   // here we now(after introducing React Context use) have 2 ways of CONSUMING context:
 
   // 1) We can use AuthContext.Consumer. In this case the syntax is like this:
@@ -53,12 +53,14 @@ const Navigation = () => {
         )}
         {ctx.isLoggedIn && (
           <li>
-            <button onClick={ctx.onLogout}>Logout</button>
+            <button onClick={ctx.onLogout} type="button">
+              Logout
+            </button>
           </li>
         )}
       </ul>
     </nav>
   );
-};
+}
 
 export default Navigation;
