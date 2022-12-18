@@ -188,11 +188,7 @@ function Login() {
           onBlur={validatePasswordHandler}
         />
         <div className={classes.actions}>
-          <Button
-            type="submit"
-            className={classes.btn}
-            disabled={!state.formIsValid}
-          >
+          <Button type="submit" className={classes.btn}>
             Login
           </Button>
         </div>
