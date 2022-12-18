@@ -1,10 +1,12 @@
-import React, { /*useEffect,  useState,*/ useReducer } from "react";
+import React, { useContext, /*useEffect,  useState,*/ useReducer } from "react";
 
 import Card from "../UI/Card/Card";
 import classes from "./Login.module.css";
 import Button from "../UI/Button/Button";
+import AuthContext from "../../store/auth-context";
 
-const Login = (props) => {
+const Login = () => {
+  const ctx = useContext(AuthContext);
   // we comment it out just for the sake of useReducer approach
   // const [enteredEmail, setEnteredEmail] = useState("");
   // const [emailIsValid, setEmailIsValid] = useState();
@@ -114,7 +116,7 @@ const Login = (props) => {
 
   const submitHandler = (event) => {
     event.preventDefault();
-    props.onLogin(state.enteredEmail, state.enteredPassword);
+    ctx.onLogin(state.enteredEmail, state.enteredPassword);
   };
 
   // we comment out useEffect because we are using useReducer for the same state updates
